@@ -1,0 +1,4 @@
+use('recipes')
+db.recipes.find({
+    'ingredients.name': {$regex: "stock"}
+})
