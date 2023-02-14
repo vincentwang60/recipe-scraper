@@ -1,3 +1,24 @@
 .container {
+  display: flex;
+  flex-flow: column;
+  height: 100vh;
+}
+.topContainer {
   background-color: var(--background-color);
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding-top: 5vh;
+  padding-bottom: 4vh;
+}
+.bottomContainer {
+  flex: 1;
+  background-color: var(--background-color);
+}
+.line {
+  border: 1px solid var(--gray);
+}
+.resultCountContainer {
+  background-color: var(--background-color);
+  padding: 10px;
 }

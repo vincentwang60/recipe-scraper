@@ -1,0 +1,17 @@
+.container {
+  background-color: var(--white);
+  width: 40%;
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 3vh;
+  margin-bottom: 5vh;
+  display: flex;
+  align-items: center;
+}
+.text {
+  padding-left: 0.5vw;
+  color: rgba(31, 31, 31, 0.5);
+  font-family: 'Josefin Sans';
+  font-size: 2.5vh;
+  padding-top: 2px;
+}

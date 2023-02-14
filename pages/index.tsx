@@ -2,11 +2,23 @@ import styles from '../styles/Home.module.css'
 import getWoksOfLifeData from './api/getWoksOfLife'
 import clientPromise from './api/createClient'
 import {uploadToMongo, getMongoRecipes} from './api/mongoCRUD'
+import Logo from './components/logo'
+import Search from './components/search'
 
 export default function Home(props: {recipeArray: Recipe[]}) {
   return (
     <div className={styles.container}>
-      ahh
+      <div className={styles.topContainer}>
+        <Logo/>
+        <Search />
+      </div>
+      <div className={styles.resultCountContainer}>
+        <div className='text'>1 to 30 of 1037 results</div>
+      </div>
+      <div className={styles.line} />
+      <div className={styles.bottomContainer}>
+        ahh
+      </div>
     </div>
   )
 }
