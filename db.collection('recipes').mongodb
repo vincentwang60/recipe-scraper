@@ -1,4 +1,6 @@
 use('recipes')
-db.recipes.find({
+/* db.recipes.find({
     'ingredients.name': {$regex: "stock"}
-})
+}) */
+
+/* db.recipes.distinct('ingredients.name', {}) */

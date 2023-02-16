@@ -1,11 +1,11 @@
-import styles from '../../styles/filters.module.css'
+import styles from '../../styles/sidebar.module.css'
 import { IoClose } from 'react-icons/io5'
 export default function Filters(props: {filters: string[]}) {
     let filterComponents: JSX.Element[] = []
     for (let filter of props.filters) {
         filterComponents.push(
             <div className={styles.filterItem}>
-                <div className='text'>{filter}</div>
+                <div className='text small'>{filter}</div>
                 <IoClose style={{paddingLeft: '5px'}} size='15px' color='#272D2D'/>
             </div>
         )

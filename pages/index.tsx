@@ -8,6 +8,36 @@ import Filters from './components/filters'
 import Category from './components/category'
 
 export default function Home(props: {recipeArray: Recipe[]}) {
+  const equivalent = {
+    'chives': 'scallions',
+    'eggplant': 'aubergine',
+    'sweet potato': 'yam',
+    'zucchini': 'squash',
+    'coffee': 'espresso',
+    'broth': 'stock',
+    'wine': 'sherry',
+    'mirin': 'rice wine',
+    'noodles': 'pasta' 
+  }
+
+  const categoryInfo: {[key: string]: string[]} = {
+    'Sauces': ['Mustard', 'Oyster sauce', 'Gochujang', 'Soy sauce', 'Hoison', 'Tomato paste', 'Sriracha', 'Chili oil'],
+    'Seasonings': ['Black pepper', 'Kombu', 'Cilantro', 'Mint', 'Cinnamon', 'Parsley', 'Basil', 'MSG', 'Dill', 'Curry Powder'],
+    'Dairy and Eggs': ['Butter', 'Condensed Milk', 'Eggs', 'Yogurt', 'Cheese', 'Sour Cream', 'Heavy Cream'],
+    'Vegetables': ['Mushrooms', 'Ginger', 'Bok Choy', 'Bell Peppers', 'Lettuce', 'Bamboo', 'Kale', 'Potato', 'Broccoli', 'Celery', 'Chives', 'Garlic', 'Beans', 'Eggplant', 'Cabbage', 'Spinach', 'Sweet potato', 'Zucchini', 'Cucumber', 'Lime', 'Lemon', 'Orange', 'Cauliflower', 'Strawberries', 'Onion', 'Carrot', 'Apple', 'Artichoke', 'Asparagus', 'Avocado', 'Corn', 'Peas', 'Blackberries', 'Raspberries', 'Blueberries', 'Taro', 'Beets', 'Brussel sprouts', 'Tomato', 'Pumpkin', 'Pineapple', 'Mango'],
+    'Baking': ['Flour', 'Puff pastry', 'Yeast', 'Vanilla', 'Vinegar', 'Coffee', 'Honey', 'Chocolate', 'Sugar'],
+    'Misc.': ['Peanuts', 'Pecans', 'Raisins', 'Broth', 'Grand Marnier', 'Mirin', 'Wine', 'Kimchi', 'Seaweed', 'Chickpeas', 'Pistachio'],
+    'Carbs': ['Noodles', 'Rice', 'Udon', 'Ramen', 'Vermicelli'],
+    'Protein': ['Chicken', 'Tofu', 'Beef', 'Turkey', 'Pork', 'Sausage', 'Scallops', 'Salmon', 'Shrimp', 'Duck', 'Bacon']
+  }
+
+  let categoryComponents: JSX.Element[] = []
+  for (const category in categoryInfo) {
+    categoryComponents.push(
+      <Category category={category} items={categoryInfo[category]} />
+    )
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.topContainer}>
@@ -15,15 +45,13 @@ export default function Home(props: {recipeArray: Recipe[]}) {
         <Search />
       </div>
       <div className={styles.resultCountContainer}>
-        <div style={{fontSize: '14px'}} className='text'>1 to 30 of 1037 results</div>
+        <div style={{fontSize: '14px'}} className='text'>1 to 20 of 1037 results</div>
       </div>
       <div className={styles.line} />
       <div className={styles.bottomContainer}>
         <div className={styles.sidebarContainer} >
           <Filters filters = {['Tomatoes', 'Eggs', 'Tofu', 'Cabbage']}/>
-          <Category />
-          <Category />
-          <Category />
+          {categoryComponents}
         </div>
         <div>Results</div>
       </div>
