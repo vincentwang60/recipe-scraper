@@ -9,11 +9,13 @@
   flex-flow: column;
   align-items: center;
   padding-top: 5vh;
-  padding-bottom: 4vh;
+  padding-bottom: 3vh;
 }
 .bottomContainer {
+  display: flex;
   flex: 1;
   background-color: var(--background-color);
+  flex-flow: row;
 }
 .line {
   border: 1px solid var(--gray);
@@ -21,4 +23,7 @@
 .resultCountContainer {
   background-color: var(--background-color);
   padding: 10px;
+}
+.sidebarContainer {
+  width: 17%;
 }
