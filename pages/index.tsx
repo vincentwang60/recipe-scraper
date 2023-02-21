@@ -1,11 +1,12 @@
 import styles from '../styles/Home.module.css'
-import getWoksOfLifeData from './api/getWoksOfLife'
+import {getWoksOfLifeData} from './api/getWoksOfLife'
 import clientPromise from './api/createClient'
 import {uploadToMongo, getMongoRecipes} from './api/mongoCRUD'
 import Logo from './components/logo'
 import Search from './components/search'
 import Filters from './components/filters'
 import Category from './components/category'
+import Result from './components/result'
 
 export default function Home(props: {recipeArray: Recipe[]}) {
   const equivalent = {
@@ -38,6 +39,13 @@ export default function Home(props: {recipeArray: Recipe[]}) {
     )
   }
 
+  let resultComponents: JSX.Element[] = []
+  for (const result of props.recipeArray) {
+    resultComponents.push(
+      <Result result={result} />
+    )
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.topContainer}>
@@ -53,7 +61,9 @@ export default function Home(props: {recipeArray: Recipe[]}) {
           <Filters filters = {['Tomatoes', 'Eggs', 'Tofu', 'Cabbage']}/>
           {categoryComponents}
         </div>
-        <div>Results</div>
+        <div className={styles.resultContainer} >
+          {resultComponents}
+        </div>
       </div>
     </div>
   )
@@ -69,8 +79,8 @@ export async function getStaticProps() {
     uploadToMongo(woksOfLifeData.props.recipeArray, db.collection('recipes'))
     return woksOfLifeData
   }
-  let recipeArray = await getMongoRecipes(db.collection('recipes'), 0, 20)
-  console.log('got recipes', recipeArray.length)
+  let recipeArray = await getMongoRecipes(db.collection('recipes'), 10, 30)
+  //console.log('got recipes', recipeArray)
   return {
     props: {recipeArray: recipeArray},
     revalidate: 100

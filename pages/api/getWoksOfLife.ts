@@ -2,7 +2,7 @@
 import axios from 'axios'
 import * as cheerio from 'cheerio';
 
-async function getWoksOfLifeData() {
+export async function getWoksOfLifeData() {
   let test = [
     'https://thewoksoflife.com/empanada-recipe-beef-cheese/'
     ,'https://thewoksoflife.com/asian-braised-short-ribs-with-chili-lime-potatoes/'
@@ -34,6 +34,7 @@ async function getWoksOfLifeData() {
   console.log(recipeUrlArray.length)
   
   //DELETE MEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+  //ALSO SCRAPE TITLE, RATING, TIME, UPDATED
   recipeUrlArray = test
   
   for (let recipe of recipeUrlArray) {
@@ -78,6 +79,3 @@ async function getRecipeData(recipeUrl: string): Promise<Recipe> {
   })
   return {_id: recipeUrl, ingredients, steps}
 }
-
-
-export default getWoksOfLifeData

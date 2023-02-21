@@ -25,5 +25,11 @@
   padding: 10px;
 }
 .sidebarContainer {
-  width: 15%;
+  width: 18%;
+  min-width: 200px;
+}
+.resultContainer {
+  display: flex;
+  flex-flow: column;
+  padding: 5px;
 }
