@@ -1,6 +1,28 @@
 use('recipes')
-/* db.recipes.find({
-    'ingredients.name': {$regex: "stock"}
-}) */
+/*
+db.recipes.find({ "$and": [
+    {"ingredients.name": {$regex: "egg.{0,1}(?=s| |$)"}},
+]
+})
+*/
 
 /* db.recipes.distinct('ingredients.name', {}) */
+
+db.recipes.aggregate(
+    [
+        { '$match': {
+            '$or': [
+                { "ingredients.name": { "$regex": "egg.{0,1}(?=s| |$)" }},
+                { "ingredients.name": { "$regex": "ginger.{0,1}(?=s| |$)" }},
+            ]
+        }},
+        { '$unwind': '$ingredients'},
+        { '$addFields': {
+            egg_score: {$regexFind: { input: "$ingredients.name", regex: /egg.{0,1}(?=s| |$)/ }}
+        }}
+        { '$addFields': 
+     { score_a: { '$cond': [ { '$gt': [ '$a', 5 ] }, 1, 0 ] },
+       score_b: { '$cond': [ { '$eq': [ '$b', 5 ] }, 1, 0 ] },
+       score_c: { '$cond': [ { '$lt': [ '$c', 10 ] }, 1, 0 ] } } },
+    ]
+)
