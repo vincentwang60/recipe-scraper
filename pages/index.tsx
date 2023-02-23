@@ -11,7 +11,7 @@ export default function Home() {
   let {query, isReady} = useRouter()
   let [syncWoksOfLife, setSyncWoksOfLife] = useState(false);
   let [resultComponents, setResultComponents] = useState<JSX.Element[]>([]);
-  let [recipeArray, setRecipeArray] = useState<Recipe[]>([]);
+  let [recipeArray, setRecipeArray] = useState<string[]>([]);
   let categoryComponents: JSX.Element[] = []
   let [start, setStart] = useState<number>(-1)
   let [count, setCount] = useState<number>(-1)
@@ -45,13 +45,14 @@ export default function Home() {
   }
 
   useEffect(()=>{
-    async function getRecipes(): Promise<Recipe[]>{
-      const response = await fetch("/api/server?filters=tomato|egg")
+    async function getRecipes(): Promise<string[]>{
+      const response = await fetch("/api/server?filters=")
+      //const response = await fetch("/api/server?filters=tomato|egg")
       return response.json()
     }
     if (start !== -1 && count !== -1) {
       getRecipes().then((recipes)=>{
-        console.log('got recipes', recipes.length)
+        console.log('got recipes', recipes)
         setRecipeArray(recipes)
       })
     }
@@ -90,9 +91,9 @@ export default function Home() {
   useEffect(()=>{
     if (recipeArray){
       let newResultComponents: JSX.Element[] = []
-      for (const result of recipeArray) {
+      for (const url of recipeArray.slice(start, start+count)) {
         newResultComponents.push(
-          <Result result={result} />
+          <Result url={url} />
         )
       }
       setResultComponents(newResultComponents)
@@ -106,13 +107,13 @@ export default function Home() {
         <Search />
       </div>
       <div className={styles.resultCountContainer}>
-        <div style={{fontSize: '14px'}} className='text'>1 to 15 of 1037 results</div>
+        <div style={{fontSize: '14px'}} className='text'>{start+1} to {start+count} of {recipeArray.length} results</div>
         <div onClick={()=>{setSyncWoksOfLife(true)}}>SYNC WOKS OF LIFE REMOVE MEEEEEE</div>
       </div>
       <div className={styles.line} />
       <div className={styles.bottomContainer}>
         <div className={styles.sidebarContainer} >
-          <Filters filters = {['Tomatoes', 'Eggs', 'Tofu', 'Cabbage']}/>
+          <Filters filters = {[]}/>
           {categoryComponents}
         </div>
         <div className={styles.resultContainer} >

@@ -26,22 +26,11 @@ export async function uploadToMongo(recipeArray: Recipe[], db: Collection<Docume
   }
 }
 
-
-
-
-
-async function getSortedRecipes(db: Collection<Document>, filters: string[]): Promise<AggregationCursor<Document>> {
+async function getSortedRecipes(db: Collection<Document>, filters: string[]): Promise<string[]> {
   let matchArray = []
   let addFieldObject: {[key: string]: any} = {}
   let groupObject: {[key: string]: any} = {
-    '_id': '$_id',
-    'ingredients': { $push: '$ingredients'},
-    'steps': { $push: '$steps'},
-    'title': { $first: '$title'},
-    'rating': { $first: '$rating'},
-    'time': { $first: '$time'},
-    'updated': { $first: '$updated'},
-    
+    '_id': '$_id'
   }
   let matchSumArray: string[] = []
   for (let filter of filters) {
@@ -66,7 +55,11 @@ async function getSortedRecipes(db: Collection<Document>, filters: string[]): Pr
       { '$sort': { matchScore: -1 }}
     ]
   )
-  return sortedRecipeCursor
+  let sortedUrlArray: string[] = []
+  await sortedRecipeCursor.forEach(recipe => {
+    sortedUrlArray.push(recipe._id)
+  })
+  return sortedUrlArray
 }
 
 export default async function getMongoRecipes(req: NextApiRequest, res: NextApiResponse) {
@@ -75,6 +68,5 @@ export default async function getMongoRecipes(req: NextApiRequest, res: NextApiR
   // @ts-expect-error
   let reqString: {filters: string} = req.query
   let filters = reqString.filters.split('|')
-  let sortedRecipeCursor = await getSortedRecipes(db, filters)
-  res.status(200).json(await sortedRecipeCursor.toArray())
+  res.status(200).json( await getSortedRecipes(db, filters) )
 }
