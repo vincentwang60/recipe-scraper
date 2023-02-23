@@ -9,4 +9,8 @@ declare interface Recipe {
     _id: string;
     ingredients: Ingredient[];
     steps: string[];
+    title: string;
+    rating?: number;
+    time: string;
+    updated: string;
 }

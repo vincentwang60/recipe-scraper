@@ -6,9 +6,11 @@ export default function Result(props: {result: Recipe}) {
     let [image, setImage] = useState(<div></div>)
 
     let ingredientComponents: JSX.Element[] = []
+    let count = 0
     for (let item of props.result.ingredients) {
+        count += 1
         ingredientComponents.push(
-            <ul className={styles.ingredient}>
+            <ul key = {count} className={styles.ingredient}>
                 <li style={{paddingRight: '10px', marginTop: '3px', fontWeight: '300'}} className='text'>{item.amount} {item.unit} {item.name}</li>
             </ul>
         )
@@ -32,11 +34,11 @@ export default function Result(props: {result: Recipe}) {
                         {image}
                     </div>
                     <div className={styles.mainContainer}>
-                        <div className={styles.title}>ASIAN POT ROAST: A NEW TAKE ON A CLASSIC SUNDAY DINNER</div>
+                        <div className={styles.title}>{props.result.title}</div>
                         <div className={styles.info}>
                             <div className={styles.time}>
                                 <AiOutlineClockCircle className={styles.icon} size='20px' color='#FFFEEB'/>
-                                <div style={{marginTop: '3px'}} className='text'>Cook Time: 3 hours</div>
+                                <div style={{marginTop: '3px'}} className='text'>Cook Time: {props.result.time}</div>
                             </div>
                             <div className={styles.link}>
                                 <AiOutlineLink className={styles.icon} size='20px' color='#FFFEEB'/>

@@ -1,14 +1,21 @@
 import styles from '../styles/Home.module.css'
-import {getWoksOfLifeData} from './api/getWoksOfLife'
-import clientPromise from './api/createClient'
-import {uploadToMongo, getMongoRecipes} from './api/mongoCRUD'
 import Logo from './components/logo'
 import Search from './components/search'
 import Filters from './components/filters'
 import Category from './components/category'
 import Result from './components/result'
+import {useState, useEffect} from 'react'
+import { useRouter } from 'next/router'
 
-export default function Home(props: {recipeArray: Recipe[]}) {
+export default function Home() {
+  let {query, isReady} = useRouter()
+  let [syncWoksOfLife, setSyncWoksOfLife] = useState(false);
+  let [resultComponents, setResultComponents] = useState<JSX.Element[]>([]);
+  let [recipeArray, setRecipeArray] = useState<Recipe[]>([]);
+  let categoryComponents: JSX.Element[] = []
+  let [start, setStart] = useState<number>(-1)
+  let [count, setCount] = useState<number>(-1)
+
   const equivalent = {
     'chives': 'scallions',
     'eggplant': 'aubergine',
@@ -20,7 +27,6 @@ export default function Home(props: {recipeArray: Recipe[]}) {
     'mirin': 'rice wine',
     'noodles': 'pasta' 
   }
-
   const categoryInfo: {[key: string]: string[]} = {
     'Sauces': ['Mustard', 'Oyster sauce', 'Gochujang', 'Soy sauce', 'Hoison', 'Tomato paste', 'Sriracha', 'Chili oil'],
     'Seasonings': ['Black pepper', 'Kombu', 'Cilantro', 'Mint', 'Cinnamon', 'Parsley', 'Basil', 'MSG', 'Dill', 'Curry Powder'],
@@ -32,19 +38,66 @@ export default function Home(props: {recipeArray: Recipe[]}) {
     'Protein': ['Chicken', 'Tofu', 'Beef', 'Turkey', 'Pork', 'Sausage', 'Scallops', 'Salmon', 'Shrimp', 'Duck', 'Bacon']
   }
 
-  let categoryComponents: JSX.Element[] = []
   for (const category in categoryInfo) {
     categoryComponents.push(
       <Category category={category} items={categoryInfo[category]} />
     )
   }
 
-  let resultComponents: JSX.Element[] = []
-  for (const result of props.recipeArray) {
-    resultComponents.push(
-      <Result result={result} />
-    )
-  }
+  useEffect(()=>{
+    async function getRecipes(): Promise<Recipe[]>{
+      const response = await fetch("/api/server?start="+start+"&count="+count+"&filters=tomato|egg")
+      return response.json()
+    }
+    if (start !== -1 && count !== -1) {
+      getRecipes().then((recipes)=>{
+        console.log('got recipes', recipes.length)
+        setRecipeArray(recipes)
+      })
+    }
+  },[start, count])
+
+  useEffect(()=>{
+    if (isReady) {
+      if (query.start) {
+        setStart(Number(query.start))
+      }
+      else {
+        setStart(0)
+      }
+      if (query.count) {
+        setCount(Number(query.count))
+      }
+      else {
+        setCount(15)
+      }
+    }
+  },[query])
+
+  useEffect(()=> {
+    async function getWoksOfLife() {
+        const response = await fetch("/api/getWoksOfLife");
+        console.log('fetched woks of life data')
+        return response.json()
+    }
+    if (syncWoksOfLife) {
+      setSyncWoksOfLife(false)
+      getWoksOfLife()
+    }
+  }, [syncWoksOfLife])
+
+
+  useEffect(()=>{
+    if (recipeArray){
+      let newResultComponents: JSX.Element[] = []
+      for (const result of recipeArray) {
+        newResultComponents.push(
+          <Result result={result} />
+        )
+      }
+      setResultComponents(newResultComponents)
+    }
+  },[recipeArray])
 
   return (
     <div className={styles.container}>
@@ -53,7 +106,8 @@ export default function Home(props: {recipeArray: Recipe[]}) {
         <Search />
       </div>
       <div className={styles.resultCountContainer}>
-        <div style={{fontSize: '14px'}} className='text'>1 to 20 of 1037 results</div>
+        <div style={{fontSize: '14px'}} className='text'>1 to 15 of 1037 results</div>
+        <div onClick={()=>{setSyncWoksOfLife(true)}}>SYNC WOKS OF LIFE REMOVE MEEEEEE</div>
       </div>
       <div className={styles.line} />
       <div className={styles.bottomContainer}>
@@ -67,22 +121,4 @@ export default function Home(props: {recipeArray: Recipe[]}) {
       </div>
     </div>
   )
-}
-
-export async function getStaticProps() {
-  const scrapeWoksOfLife = false;
-  const client = await clientPromise
-  const db = client.db("recipes")
-  if (scrapeWoksOfLife){
-    const woksOfLifeData = await getWoksOfLifeData()
-    console.log('got woks of life data:', woksOfLifeData.props.recipeArray.length)
-    uploadToMongo(woksOfLifeData.props.recipeArray, db.collection('recipes'))
-    return woksOfLifeData
-  }
-  let recipeArray = await getMongoRecipes(db.collection('recipes'), 10, 30)
-  //console.log('got recipes', recipeArray)
-  return {
-    props: {recipeArray: recipeArray},
-    revalidate: 100
-  }
 }
