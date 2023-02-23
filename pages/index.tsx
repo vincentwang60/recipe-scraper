@@ -46,7 +46,7 @@ export default function Home() {
 
   useEffect(()=>{
     async function getRecipes(): Promise<Recipe[]>{
-      const response = await fetch("/api/server?start="+start+"&count="+count+"&filters=tomato|egg")
+      const response = await fetch("/api/server?filters=tomato|egg")
       return response.json()
     }
     if (start !== -1 && count !== -1) {
