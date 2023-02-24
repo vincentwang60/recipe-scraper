@@ -47,7 +47,10 @@ export default function Result(props: {url: string}) {
                                 </div>
                                 <div className={styles.link}>
                                     <AiOutlineLink className={styles.icon} size='20px' color='#FFFEEB'/>
-                                    <div style={{marginTop: '3px', textDecoration: 'underline'}} className='text'>{recipe._id}</div>
+                                    <a href={recipe._id+'#recipe'} target="_blank" style={{marginTop: '1px', textDecoration: 'underline'}} className='text'>{recipe._id}</a>
+                                </div>
+                                <div className={styles.rating}>
+                                    <div style={{marginTop: '3px'}} className='text'>Rating: {recipe.rating}/5</div>
                                 </div>
                             </div>
                             <div style={{paddingTop: '10px'}}className='text'>Ingredients:</div>

@@ -55,7 +55,7 @@ export default function Search(props: {ingredients: {[key: string]: string[]}, f
 
     const handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'Enter') {
-          if (results.length){
+          if (results.length && !props.filters.includes(results[0])){
             props.setFilters(props.filters.concat([results[0]]))
             setValue('')
           }
@@ -86,7 +86,9 @@ export default function Search(props: {ingredients: {[key: string]: string[]}, f
                     <div ref={resultsRef} className={styles.results}>
                       {results.length ? results.map((result)=>{ return (
                         <div onClick={()=>{
-                          props.setFilters(props.filters.concat([result]))
+                          if (!props.filters.includes(result)){
+                            props.setFilters(props.filters.concat([result]))
+                          }
                           setValue('')
                         }} className={styles.result}
                         >

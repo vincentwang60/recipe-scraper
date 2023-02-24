@@ -17,6 +17,7 @@ export default function Home() {
   let [start, setStart] = useState<number>(-1)
   let [count, setCount] = useState<number>(-1)
   let [filters, setFilters] = useState<string[]>([])
+  const pageLength = 15;
 
   const equivalent = {
     'chives': 'scallions',
@@ -42,7 +43,7 @@ export default function Home() {
 
   for (const category in categoryInfo) {
     categoryComponents.push(
-      <Category category={category} items={categoryInfo[category]} />
+      <Category filters={filters} setFilters={(newFilters: string[])=>{setFilters(newFilters);}} category={category} items={categoryInfo[category]} />
     )
   }
 
@@ -60,6 +61,7 @@ export default function Home() {
     getRecipes().then((recipes)=>{
       console.log('got recipes', recipes.length)
       setRecipeArray(recipes)
+      setStart(0)
     })
   },[filters])
 
@@ -75,7 +77,7 @@ export default function Home() {
         setCount(Number(query.count))
       }
       else {
-        setCount(15)
+        setCount(pageLength)
       }
     }
   },[query])
@@ -110,7 +112,7 @@ export default function Home() {
       }
       if (start + count < recipeArray.length){
         newPageButtons.push(
-          <div onClick={()=>{}} className={styles.pageButton}>
+          <div onClick={()=>{setStart(start+pageLength); window.scrollTo({top: 0})}} className={styles.pageButton}>
             Next Page
           </div>
         )
@@ -118,7 +120,7 @@ export default function Home() {
       setPageButtons(newPageButtons)
       setResultComponents(newResultComponents)
     }
-  },[recipeArray])
+  },[recipeArray, start])
 
   return (
     <div className={styles.container}>
@@ -127,7 +129,7 @@ export default function Home() {
         <Search ingredients={categoryInfo} filters={filters} setFilters={(newFilters: string[])=>{setFilters(newFilters);}}/>
       </div>
       <div className={styles.resultCountContainer}>
-        <div style={{fontSize: '14px'}} className='text'>{start+1} to {start+count} of {recipeArray.length} results</div>
+        <div style={{fontSize: '14px'}} className='text'>{start+1} to {Math.min(start+count,  recipeArray.length)} of {recipeArray.length} results</div>
       </div>
       <div className={styles.line} />
       <div className={styles.bottomContainer}>
@@ -137,7 +139,9 @@ export default function Home() {
         </div>
         <div className={styles.resultContainer} >
           {resultComponents}
-          {pageButtons}
+          <div className={styles.buttonContainer}>
+            {pageButtons}
+          </div>
         </div>
       </div>
     </div>
