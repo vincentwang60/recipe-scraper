@@ -4,6 +4,7 @@
   background-color: var(--dark-gray);
   margin: 5px;
   padding: 5px;
+  width: 100%;
 }
 .containerFlair {
   display: flex;

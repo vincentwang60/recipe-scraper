@@ -1,17 +1,63 @@
 .container {
-  background-color: var(--white);
   width: 40%;
-  border-radius: 5px;
-  padding: 15px;
+}
+.searchContainer {
+  flex-direction: column;
+  flex: 1;
+}
+.search {
+  flex: 1;
+  background-color: var(--white);
+  border-radius: 5px 5px 0px 0px;
+  padding: 10px;
   margin-top: 3vh;
   margin-bottom: 5vh;
   display: flex;
   align-items: center;
 }
 .text {
+  flex: 1;
   padding-left: 0.5vw;
-  color: rgba(31, 31, 31, 0.5);
   font-family: 'Josefin Sans';
   font-size: 2.5vh;
+  border: none;
   padding-top: 2px;
+  line-height: 150%;
+  background-color: var(--white);
+}
+.text:focus{
+    outline: none;
+}
+.results {
+  position: absolute;
+  width: calc(100% - 10px);
+  margin-top: -5vh;
+  border-radius: 0px 0px 5px 5px;
+  border-top: 1px solid var(--dark-gray);
+  background-color: var(--white);
+  visibility: hidden;
+  padding: 5px;
+}
+.resultsContainer {
+  display: flex;
+  position: relative;
+}
+.result {
+  display: flex;
+  font-family: 'Josefin Sans';
+  font-size: 2.5vh;
+  padding: 5px;
+  padding-top: 7px;
+  align-items: center;
+  justify-content: space-between;
+}
+.addText {
+  font-family: 'Josefin Sans';
+  font-size: 2vh;
+  padding-top: 4px;
+  padding-left: 5px;
+}
+.addContainer {
+  display: flex;
+  padding-left: 10px;
 }

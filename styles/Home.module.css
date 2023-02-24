@@ -32,4 +32,14 @@
   display: flex;
   flex-flow: column;
   padding: 5px;
+  align-items: center;
+}
+.pageButton {
+  border: 2px solid var(--highlight);
+  padding: 10px;
+  border-radius: 5px;
+  color: var(--highlight);
+  font-family: 'Josefin Sans';
+  font-size: 16px;
+  font-weight: 500;
 }
